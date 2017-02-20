@@ -38,13 +38,13 @@ mangaListRouter.route('/api/v1/list/:language')
         var listSize = req.query.size;
 
         if (listSize != null && page == null) {
-            var pageNotSpecifiedErrorDescription = 'The number of mangas per page should be specified together with the page number';
+            var pageNotSpecifiedErrorDescription = 'The number of mangas per page should be specified together with the page number.';
             return error400(pageNotSpecifiedErrorDescription, res);
         }
 
         if (listSize < 25 || listSize > 2000) {
 
-            var listSizeErrorDescription = 'The number of mangas per page should be enclosed in the interval [25;2000]';
+            var listSizeErrorDescription = 'The number of mangas per page should be enclosed in the interval [25;2000].';
             return error400(listSizeErrorDescription, res);
 
         }
@@ -98,13 +98,15 @@ mangaListRouter.route('/api/v1/list/:language')
 
                 }
 
+                data.manga_total_number = result.total;
+
                 return sendResponse(data, res);
 
             })
 
             .on('fail', function (result, response) {
 
-                var genericErrorDescription = 'Some unknown error occurred in calling Manga Eden API; the site returned: ' + response.statusCode + ' ' + response.statusMessage;
+                var genericErrorDescription = 'Some unknown error occurred in calling Manga Eden API; the site returned: ' + response.statusCode + ' ' + response.statusMessage + '.';
                 return error500(genericErrorDescription, res);
 
             });
