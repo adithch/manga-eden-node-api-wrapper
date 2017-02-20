@@ -26,7 +26,7 @@ app.use(mangaRouter);
 app.use(chapterRouter);
 
 // start server on the specified port and binding host
-app.listen(3000, function() {
+app.listen(3000, '0.0.0.0', function() {
   // print a message when the server starts listening
   console.log('server starting on port 3000');
 
