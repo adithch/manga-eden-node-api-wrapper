@@ -6,6 +6,7 @@ var express = require('express');
 // Add routes
 var listRouter = require('./routes/list');
 var mangaRouter = require('./routes/manga');
+var chapterRouter = require('./routes/chapter');
 
 // Create a new express server
 var app = express();
@@ -22,6 +23,7 @@ app.use(function(req, res, next) {
 app.use(express.static(__dirname + '/public'));
 app.use(listRouter);
 app.use(mangaRouter);
+app.use(chapterRouter);
 
 // start server on the specified port and binding host
 app.listen(3000, function() {
