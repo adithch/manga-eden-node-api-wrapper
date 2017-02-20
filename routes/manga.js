@@ -32,16 +32,28 @@ mangaRouter.route('/api/v1/manga/:id')
 
                 var data = {};
 
+                data.title = result.title;
+                data.title_keywords = result['title-kw'];
                 data.author = result.author;
+                data.author_keywords = result['author-kw'];
                 data.artist = result.artist;
+                data.artist_keywords = result['artist-kw'];
                 data.aka = result.aka;
                 data.alias = result.alias;
                 data.categories = result.categories;
-                data.chapters_number = result.chapters_len;
-                data.creation_date = result.creation_date;
+                data.chapters_number = result['chapters_len'];
+                data.creation_date = result['creation_date'];
+                data.last_chapter_date = result['last_chapter_date'];
                 data.hits = result.hits;
-                data.description = result.hits;
+                data.description = result.description;
                 data.image_link = downloadUrl + result.image;
+                data.release_year = result.released;
+
+                if (result.language = 0) {
+                    data.language = 'en';
+                } else if (result.language = 1) {
+                    data.language = 'it';
+                }
 
                 var chapters = result.chapters;
                 data.chapters = [];
