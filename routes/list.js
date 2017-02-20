@@ -61,10 +61,10 @@ mangaListRouter.route('/api/v1/list/:language')
 
             .on('success', function (result,response) {
 
-                var data = result;
-                data.manga = result.manga;
+                var data = {};
+                mangaList = result.manga;
 
-                if (data.manga.length < 1) {
+                if (mangaList.length < 1) {
 
                     var combinationErrorDescription =
                         'The manga list is empty; ' +
@@ -74,25 +74,27 @@ mangaListRouter.route('/api/v1/list/:language')
 
                 }
 
-                for (var i = 0; i < data.manga.length; i++) {
+                if (page != null) {
+                    data.page_number = result.page;
+                    data.manga_start_number = result.start;
+                    data.manga_end_number = result.end;
+                }
 
-                    data.manga[i].title = data.manga[i].t;
-                    delete data.manga[i].t;
-                    data.manga[i].alias = data.manga[i].a;
-                    delete data.manga[i].a;
-                    data.manga[i].categories = data.manga[i].c;
-                    delete data.manga[i].c;
-                    data.manga[i].status = data.manga[i].s;
-                    delete data.manga[i].s;
-                    data.manga[i].image_link = downloadUrl + data.manga[i].im;
-                    delete data.manga[i].im;
-                    data.manga[i].id = data.manga[i].i;
-                    delete data.manga[i].i;
+                data.manga = [];
+
+                for (var i = 0; i < mangaList.length; i++) {
+
+                    data.manga[i] = {};
+
+                    data.manga[i].title = mangaList[i].t;
+                    data.manga[i].alias = mangaList[i].a;
+                    data.manga[i].categories = mangaList[i].c;
+                    data.manga[i].status = mangaList[i].s;
+                    data.manga[i].image_link = downloadUrl + mangaList[i].im;
+                    data.manga[i].id = mangaList[i].i;
                     data.manga[i].link = mangaUrl + data.manga[i].id + '/';
-                    data.manga[i].last_chapter_date = data.manga[i].ld;
-                    delete data.manga[i].ld;
-                    data.manga[i].hits = data.manga[i].h;
-                    delete data.manga[i].h;
+                    data.manga[i].last_chapter_date = mangaList[i].ld;
+                    data.manga[i].hits = mangaList[i].h;
 
                 }
 
