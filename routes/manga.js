@@ -3,6 +3,7 @@
 var express = require('express');
 var mangaRouter = express.Router();
 var rest = require('restler');
+var he = require('he');
 
 // definition of the endpoints to retrieve the manga info and the manga's image download
 var mangaUrl = 'https://www.mangaeden.com/api/manga/';
@@ -32,20 +33,20 @@ mangaRouter.route('/api/v1/manga/:id')
 
                 var data = {};
 
-                data.title = result.title;
+                data.title = he.decode(result.title);
                 data.title_keywords = result['title-kw'];
                 data.author = result.author;
                 data.author_keywords = result['author-kw'];
                 data.artist = result.artist;
                 data.artist_keywords = result['artist-kw'];
-                data.aka = result.aka;
+                data.aka = result.aka.map(he.decode); // array
                 data.alias = result.alias;
-                data.categories = result.categories;
+                data.categories = result.categories; // array
                 data.chapters_number = result['chapters_len'];
                 data.creation_date = result['creation_date'];
                 data.last_chapter_date = result['last_chapter_date'];
                 data.hits = result.hits;
-                data.description = result.description;
+                data.description = he.decode(result.description);
                 data.image_link = downloadUrl + result.image;
                 data.release_year = result.released;
 
@@ -61,6 +62,7 @@ mangaRouter.route('/api/v1/manga/:id')
                 for (var i = 0; i < chapters.length; i++) {
 
                     data.chapters[i] = {};
+
                     data.chapters[i].number = chapters[i][0];
                     data.chapters[i].release_date = chapters[i][1];
                     data.chapters[i].title = chapters[i][2];
@@ -91,7 +93,7 @@ mangaRouter.route('/api/v1/manga/:id')
     });
 
 function sendResponse(data, res) {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
 }
@@ -101,7 +103,7 @@ function error400(description, res) {
     err.status = 400;
     err.message = 'Bad Request';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(400);
     res.send(JSON.stringify(err));
 }
@@ -111,7 +113,7 @@ function error404(description, res) {
     err.status = 404;
     err.message = 'Not Found';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(404);
     res.send(JSON.stringify(err));
 }
@@ -121,7 +123,7 @@ function error500(description, res) {
     err.status = 500;
     err.message = 'Internal Server Error';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(500);
     res.send(JSON.stringify(err));
 }

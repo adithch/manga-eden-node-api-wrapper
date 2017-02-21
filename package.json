@@ -1,5 +1,5 @@
 {
-	"name": "NodejsStarterApp",
+	"name": "Manga-End-Node.js-API-Wrapper",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -7,7 +7,8 @@
 	},
 	"dependencies": {
 		"express": "4.13.x",
-		"restler": "latest"
+		"restler": "latest",
+		"he": "latest"
 	},
 	"repository": {},
 	"engines": {

@@ -37,6 +37,7 @@ chapterRouter.route('/api/v1/chapter/:id')
                 for (var i = 0; i < pages.length; i++) {
 
                     data.chapter_pages[i] = {};
+
                     data.chapter_pages[i].page_number = pages[i][0];
                     data.chapter_pages[i].id = pages[i][1];
                     data.chapter_pages[i].link = downloadUrl + data.chapter_pages[i].id;
@@ -65,7 +66,7 @@ chapterRouter.route('/api/v1/chapter/:id')
     });
 
 function sendResponse(data, res) {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
 }
@@ -75,7 +76,7 @@ function error400(description, res) {
     err.status = 400;
     err.message = 'Bad Request';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(400);
     res.send(JSON.stringify(err));
 }
@@ -85,7 +86,7 @@ function error404(description, res) {
     err.status = 404;
     err.message = 'Not Found';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(404);
     res.send(JSON.stringify(err));
 }
@@ -95,7 +96,7 @@ function error500(description, res) {
     err.status = 500;
     err.message = 'Internal Server Error';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(500);
     res.send(JSON.stringify(err));
 }

@@ -3,6 +3,7 @@
 var express = require('express');
 var mangaListRouter = express.Router();
 var rest = require('restler');
+var he = require('he');
 
 // definition of the endpoints to retrieve the manga list, the manga info, and the manga's image download
 var mangaListUrl = 'https://www.mangaeden.com/api/list/';
@@ -86,7 +87,7 @@ mangaListRouter.route('/api/v1/list/:language')
 
                     data.manga[i] = {};
 
-                    data.manga[i].title = mangaList[i].t;
+                    data.manga[i].title = he.decode(mangaList[i].t);
                     data.manga[i].alias = mangaList[i].a;
                     data.manga[i].categories = mangaList[i].c;
                     data.manga[i].status = mangaList[i].s;
@@ -114,7 +115,7 @@ mangaListRouter.route('/api/v1/list/:language')
     });
 
 function sendResponse(data, res) {
-    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
 }
@@ -124,7 +125,7 @@ function error400(description, res) {
     err.status = 400;
     err.message = 'Bad Request';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(400);
     res.send(JSON.stringify(err));
 }
@@ -134,7 +135,7 @@ function error500(description, res) {
     err.status = 500;
     err.message = 'Internal Server Error';
     err.description = description;
-    res.setHeader('Content-Type','application/json');
+    res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(500);
     res.send(JSON.stringify(err));
 }
