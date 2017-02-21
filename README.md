@@ -4,8 +4,11 @@ A Node.js wrapper for the [API](www.mangaeden.com/api/) of Manga Eden.
 ____
 
 The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful REST APIs to access its resources, namely it provides clients the opportunity to:
+
 1) List the mangas available in the database, in English or Italian;
+
 2) Retrieve information regarding a specific manga (title, author, description, number of chapters available to download, etc);
+
 3) Retrieve information regarding a specific chapter (page number, download link, etc).
 
 However, such APIs do not always follow the specifications to be considered JSON REST APIs, and require some effort client-side in order to be consumed.
@@ -34,7 +37,9 @@ ____
 To try the Manga Eden API Wrapper on localhost, assuming you already installed [Node.js](https://nodejs.org/it/download/), clone the repository or download the zip and extract it, then on the terminal:
 
 1) `cd` into the project's root folder;
+
 2) execute `npm install`;
+
 3) execute `npm start`.
 
 Now you're ready to test the APIs. Just prefix `localhost:3000` to the URLs here described (for example: `localhost:3000/api/v1/list/it/`).
@@ -150,6 +155,7 @@ where `[{ ... }]` is an array of objects and `[...]` is an array of primitive ty
 In addiction to provide JSON REST APis responses easily deserialized by common parsers, this Node.js Wrapper has a couple of improvements:
 
 1) All the `link` keys in the responses are URL ready to be consumed by the client to either make the subsequent call or download an image; no cancatenation with other URLs are necessary;
+
 2) Where necessary, the HTML entities are decoded, so instead of receiving response strings like `&#x50D5;&#x305F;&#x3061;&#x306E;&#x3001;&#x604B;&#x306E;&#x306F;&#x3058;&#x307E;&#x308A;` as you get with the original APIs, you get `僕たちの、恋のはじまり`. 
 
 
