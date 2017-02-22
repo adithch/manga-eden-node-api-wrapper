@@ -3,7 +3,7 @@ A Node.js wrapper for the [API](www.mangaeden.com/api/) of Manga Eden.
 
 ____
 
-The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful REST APIs to access its resources, namely it provides clients the opportunity to:
+The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful REST APIs to access its resources; clients consuming such APIs are in fact able to:
 
 1) List the mangas available in the database, in English or Italian;
 
@@ -11,7 +11,7 @@ The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful RE
 
 3) Retrieve information regarding a specific chapter (page number, download link, etc).
 
-However, such APIs do not always follow the specifications to be considered JSON REST APIs, and require some effort client-side in order to be consumed.
+However, the APIs are not always compliant with the standard of JSON REST APIs, and require some effort client-side in order to be properly consumed.
 For example, the API call to retrieve manga information produces in the response a _Chapter's array_ described in these terms:
 
 ```
@@ -26,9 +26,9 @@ Example of a chapter array element:
 ]
 ```
 
-It's clear that JSON serializers/deserializers libraries like GSON or Jackson are not able to parse this response, and the developers need to do that manually.
+It's clear that JSON serializers/deserializers libraries like GSON or Jackson are not able to parse this response, and the developers need to do that manually parsing the JSON array element-by-element, since no keys are provided and multiple types are used.
 
-In order to reduce the development effort client-side, I wrote this Node.js API wrapper which acts as a middleware between the client application and Manga Eden APIs, parsing the response appropriately and adding some useful features.
+In order to reduce the development effort client-side, I wrote this Node.js wrapper which acts as a middleware between the client application and Manga Eden APIs, parsing the response appropriately and adding some useful features.
 
 ____
 
@@ -154,9 +154,9 @@ where `[{ ... }]` is an array of objects and `[...]` is an array of primitive ty
 
 In addiction to provide JSON REST APis responses easily deserialized by common parsers, this Node.js Wrapper has a couple of improvements:
 
-1) All the `link` keys in the responses are URL ready to be consumed by the client to either make the subsequent call or download an image; no cancatenation with other URLs are necessary;
+1) All the `link` keys in the responses are URLs ready to be consumed by the client to either make the subsequent call or download an image; no cancatenation with other URLs are necessary;
 
-2) Where necessary, the HTML entities are decoded, so instead of receiving response strings like `&#x50D5;&#x305F;&#x3061;&#x306E;&#x3001;&#x604B;&#x306E;&#x306F;&#x3058;&#x307E;&#x308A;` as you get with the original APIs, you get `僕たちの、恋のはじまり`. 
+2) Where necessary, the HTML entities are decoded, so instead of receiving response strings like `&#x50D5;&#x305F;&#x3061;&#x306E;&#x3001;&#x604B;&#x306E;&#x306F;&#x3058;&#x307E;&#x308A;` as you get with the original APIs, you obtain `僕たちの、恋のはじまり`. 
 
 
 ## Error responses
@@ -173,7 +173,7 @@ For example, if you call the API `/api/v1/list/es/`, since Spanish (`es`) langua
 }
 ```
 
-Or, if you try to provided a non-existent manga id calling `/api/v1/manga/56b7feqqw4b4719a1668b7b2183b/`, you get:
+Or, if you try to provide a non-existent manga id calling `/api/v1/manga/56b7feqqw4b4719a1668b7b2183b/`, you get:
 
 ```
 {
