@@ -1,14 +1,17 @@
-
-
+// Gathering of required modules:
+// Express as web server
+// Restler as rest client
+// He for HTML entities decoding
 var express = require('express');
 var mangaRouter = express.Router();
 var rest = require('restler');
 var he = require('he');
 
-// definition of the endpoints to retrieve the manga info and the manga's image download
+// Definition of the endpoints to retrieve the manga info and the manga's image download
 var mangaUrl = 'https://www.mangaeden.com/api/manga/';
 var downloadUrl = 'https://cdn.mangaeden.com/mangasimg/';
 
+// Defition of the manga Router -- Only the GET function
 mangaRouter.route('/api/v1/manga/:id')
 
     .get(function (req, res, next) {
@@ -34,11 +37,8 @@ mangaRouter.route('/api/v1/manga/:id')
                 var data = {};
 
                 data.title = he.decode(result.title);
-                data.title_keywords = result['title-kw'];
-                data.author = result.author;
-                data.author_keywords = result['author-kw'];
-                data.artist = result.artist;
-                data.artist_keywords = result['artist-kw'];
+                data.author = result.author.split(' ').map(capitalizeOnlyFirstLetter).join(' ');
+                data.artist = result.artist.split(' ').map(capitalizeOnlyFirstLetter).join(' ');
                 data.aka = result.aka.map(he.decode); // array
                 data.alias = result.alias;
                 data.categories = result.categories; // array
@@ -126,6 +126,10 @@ function error500(description, res) {
     res.setHeader('Content-Type','application/json; charset=utf-8');
     res.status(500);
     res.send(JSON.stringify(err));
+}
+
+function capitalizeOnlyFirstLetter(x) {
+    return x.charAt(0).toUpperCase() + x.slice(1).toLowerCase()
 }
 
 module.exports = mangaRouter;
