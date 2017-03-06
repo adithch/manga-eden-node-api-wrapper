@@ -6,6 +6,7 @@ var express = require('express');
 var mangaRouter = express.Router();
 var rest = require('restler');
 var he = require('he');
+var httpError = require('./httpError');
 
 // Definition of the endpoints to retrieve the manga info and the manga's image download
 var mangaUrl = 'https://www.mangaeden.com/api/manga/';
@@ -22,7 +23,7 @@ mangaRouter.route('/api/v1/manga/:id')
 
         if (mangaId == null) {
             var mangaIdNullErrorDescription = 'The manga id cannot be null.';
-            return error400(mangaIdNullErrorDescription, res);
+            return httpError.error400(mangaIdNullErrorDescription, res);
         }
 
         var url = mangaUrl + mangaId;
@@ -80,12 +81,12 @@ mangaRouter.route('/api/v1/manga/:id')
                 if (response.statusCode = 404) {
 
                     var idErrorDescription = 'Manga not found. Make sure you searched for a valid manga id.';
-                    return error404(idErrorDescription, res);
+                    return httpError.error404(idErrorDescription, res);
 
                 } else {
 
                     var genericErrorDescription = 'Some unknown error occurred in calling Manga Eden API; the site returned: ' + response.statusCode + ' ' + response.statusMessage;
-                    return error500(genericErrorDescription, res);
+                    return httpError.error500(genericErrorDescription, res);
 
                 }
             });
@@ -96,36 +97,6 @@ function sendResponse(data, res) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
-}
-
-function error400(description, res) {
-    var err = {};
-    err.status = 400;
-    err.message = 'Bad Request';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(400);
-    res.send(JSON.stringify(err));
-}
-
-function error404(description, res) {
-    var err = {};
-    err.status = 404;
-    err.message = 'Not Found';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(404);
-    res.send(JSON.stringify(err));
-}
-
-function error500(description, res) {
-    var err = {};
-    err.status = 500;
-    err.message = 'Internal Server Error';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(500);
-    res.send(JSON.stringify(err));
 }
 
 function capitalizeOnlyFirstLetter(x) {

@@ -3,6 +3,7 @@
 var express = require('express');
 var chapterRouter = express.Router();
 var rest = require('restler');
+var httpError = require('./httpError');
 
 var chapterUrl = 'https://www.mangaeden.com/api/chapter/';
 var downloadUrl = 'https://cdn.mangaeden.com/mangasimg/';
@@ -17,7 +18,7 @@ chapterRouter.route('/api/v1/chapter/:id')
 
         if (chapterId == null) {
             var chapterIdNullErrorDescription = 'The chapter id cannot be null.';
-            return error400(chapterIdNullErrorDescription, res);
+            return httpError.error400(chapterIdNullErrorDescription, res);
         }
 
         var url = chapterUrl + chapterId;
@@ -53,12 +54,12 @@ chapterRouter.route('/api/v1/chapter/:id')
                 if (response.statusCode = 404) {
 
                     var idErrorDescription = 'Chapter not found. Make sure you searched for a valid chapter id.';
-                    return error404(idErrorDescription, res);
+                    return httpError.error404(idErrorDescription, res);
 
                 } else {
 
                     var genericErrorDescription = 'Some unknown error occurred in calling Manga Eden API; the site returned: ' + response.statusCode + ' ' + response.statusMessage;
-                    return error500(genericErrorDescription, res);
+                    return httpError.error500(genericErrorDescription, res);
 
                 }
             });
@@ -69,36 +70,6 @@ function sendResponse(data, res) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
-}
-
-function error400(description, res) {
-    var err = {};
-    err.status = 400;
-    err.message = 'Bad Request';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(400);
-    res.send(JSON.stringify(err));
-}
-
-function error404(description, res) {
-    var err = {};
-    err.status = 404;
-    err.message = 'Not Found';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(404);
-    res.send(JSON.stringify(err));
-}
-
-function error500(description, res) {
-    var err = {};
-    err.status = 500;
-    err.message = 'Internal Server Error';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(500);
-    res.send(JSON.stringify(err));
 }
 
 module.exports = chapterRouter;

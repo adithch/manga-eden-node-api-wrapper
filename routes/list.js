@@ -6,6 +6,7 @@ var express = require('express');
 var mangaListRouter = express.Router();
 var rest = require('restler');
 var he = require('he');
+var httpError = require('./httpError');
 
 // Definition of the endpoints to retrieve the manga list and the download URL
 var mangaListUrl = 'https://www.mangaeden.com/api/list/';
@@ -27,7 +28,7 @@ mangaListRouter.route('/api/v1/list/:language')
 
             // Throw an error in case
             var languageErrorDescription = '[' + requestLanguage + '] is not a supported language; use [en] or [it] instead.';
-            return error400(languageErrorDescription, res);
+            return httpError.error400(languageErrorDescription, res);
 
         }
 
@@ -41,7 +42,7 @@ mangaListRouter.route('/api/v1/list/:language')
         if (page < 0) {
 
             var pageErrorDescription = 'The page number should be equal or greater than 0.';
-            return error400(pageErrorDescription, res);
+            return httpError.error400(pageErrorDescription, res);
 
         }
 
@@ -51,14 +52,14 @@ mangaListRouter.route('/api/v1/list/:language')
         // Check that the size param is not null and same for page (you can't define the mangas per page without page number) -- In case, throw an error
         if (listSize != null && page == null) {
             var pageNotSpecifiedErrorDescription = 'The number of mangas per page should be specified together with the page number.';
-            return error400(pageNotSpecifiedErrorDescription, res);
+            return httpError.error400(pageNotSpecifiedErrorDescription, res);
         }
 
         // Check that the size param is inside the range provided by Manga Eden, found empirically -- If it's not the case, throw an error
         if (listSize < 25 || listSize > 2000) {
 
             var listSizeErrorDescription = 'The number of mangas per page should be enclosed in the interval [25;2000].';
-            return error400(listSizeErrorDescription, res);
+            return httpError.error400(listSizeErrorDescription, res);
 
         }
 
@@ -90,7 +91,7 @@ mangaListRouter.route('/api/v1/list/:language')
                         'The manga list is empty; ' +
                         'you chose a page number too large for the page size (if not specified, the default is 500 mangas per page). ' +
                         'The total number of mangas available is: ' + data.total + '.';
-                    return error400(combinationErrorDescription, res);
+                    return httpError.error400(combinationErrorDescription, res);
 
                 }
 
@@ -132,38 +133,18 @@ mangaListRouter.route('/api/v1/list/:language')
 
                 // Throw a generic error
                 var genericErrorDescription = 'Some unknown error occurred in calling Manga Eden API; the site returned: ' + response.statusCode + ' ' + response.statusMessage + '.';
-                return error500(genericErrorDescription, res);
+                return httpError.error500(genericErrorDescription, res);
 
             });
 
     });
 
-// Definition of helper functions to send the response or appropriate errors
+// Definition of helper functions to send the response or appropriate error
 
 function sendResponse(data, res) {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.status(200);
     res.send(JSON.stringify(data));
-}
-
-function error400(description, res) {
-    var err = {};
-    err.status = 400;
-    err.message = 'Bad Request';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(400);
-    res.send(JSON.stringify(err));
-}
-
-function error500(description, res) {
-    var err = {};
-    err.status = 500;
-    err.message = 'Internal Server Error';
-    err.description = description;
-    res.setHeader('Content-Type','application/json; charset=utf-8');
-    res.status(500);
-    res.send(JSON.stringify(err));
 }
 
 module.exports = mangaListRouter;
