@@ -11,7 +11,7 @@ The popular manga repository [Manga Eden](https://www.mangaeden.com/) provides u
 
 3) Retrieve information regarding a specific chapter (page number, download link, etc).
 
-However, given how they are designed, based on which language/deserializer you use the APIs may require some effort client-side in order to be properly consumed.
+However, given how they are designed, depending on which language/deserializer you use the APIs may require some effort client-side in order to be properly consumed.
 For example, the API call to retrieve manga information produces in the response a _Chapter's array_ as follows:
 
 ```
