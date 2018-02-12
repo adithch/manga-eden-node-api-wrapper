@@ -11,8 +11,8 @@ The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful RE
 
 3) Retrieve information regarding a specific chapter (page number, download link, etc).
 
-However, the APIs are not always compliant with the standard of JSON REST APIs, and require some effort client-side in order to be properly consumed.
-For example, the API call to retrieve manga information produces in the response a _Chapter's array_ described in these terms:
+However, given how they are designed, based on which language/deserializer you use the APIs may require some effort client-side in order to be properly consumed.
+For example, the API call to retrieve manga information produces in the response a _Chapter's array_ as follows:
 
 ```
 Chapter's array explained
@@ -22,13 +22,13 @@ Example of a chapter array element:
 5, # <-- chapter's number 
 1275542373.0, # <-- chapter's date 
 "5", # <-- chapter's title 
-"4e711cb0c09225616d037cc2" # <-- chapter's ID (chapter.id in the next section) 
+"4e711cb0c09225616d037cc2" # <-- chapter's ID 
 ]
 ```
 
-It's clear that JSON serializers/deserializers libraries like GSON or Jackson are not able to parse this response, and the developers need to do that manually parsing the JSON array element-by-element, since no keys are provided and multiple types are used.
+Since no keys are provided and multiple types are used, JSON serializers/deserializers libraries like GSON or Jackson are not able to parse this response, and the developer needs to do that manually - i.e. parsing the JSON array element-by-element.
 
-In order to reduce the development effort client-side, I wrote this Node.js wrapper which acts as a middleware between the client application and Manga Eden APIs, parsing the response appropriately and adding some useful features.
+In order to reduce the development effort client-side, I wrote this Node.js wrapper which acts as a middleware between the client application and Manga Eden APIs, parsing the response appropriately and offering it nicely adding some useful features.
 
 ____
 
