@@ -1,9 +1,9 @@
 # Manga Eden Node.js Api Wrapper
-A Node.js wrapper for the [API](www.mangaeden.com/api/) of Manga Eden.
+A Node.js wrapper for the [API](https://www.mangaeden.com/api/) of Manga Eden.
 
 ____
 
-The popular manga repository [Manga Eden](www.mangaeden.com/) provides useful REST APIs to access its resources; clients consuming such APIs are in fact able to:
+The popular manga repository [Manga Eden](https://www.mangaeden.com/) provides useful REST APIs to access its resources; clients consuming such APIs are in fact able to:
 
 1) List the mangas available in the database, in English or Italian;
 
